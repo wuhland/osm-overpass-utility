@@ -78,7 +78,7 @@ erry = query_yes_no("would you like to extract all osm in your bounding box?")
 
 if erry is True :
     name = region
-    url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node("+ bb + ");way("+ bb + ");relation("+ bb +"););(._;%3E;);out%20body;")
+    url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node("+ bb + ");way("+ bb + ");relation("+ bb +"););(._;%3E;);out%20meta;")
     print("requesting web resource")
     myRequest = urllib2.Request(url)
     print("reading data from resource")
@@ -113,7 +113,7 @@ else:
         else:
             query = "%22" + query + "%22" 
 
-        url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node["+ query +"]("+ bb + ");way[" + query + "]("+ bb + ");relation["+ query +"]("+ bb +"););(._;%3E;);out%20body;")
+        url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node["+ query +"]("+ bb + ");way[" + query + "]("+ bb + ");relation["+ query +"]("+ bb +"););(._;%3E;);out%20meta;")
 
         print("requesting web resource")
         myRequest = urllib2.Request(url)
