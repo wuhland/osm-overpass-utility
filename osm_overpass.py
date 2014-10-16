@@ -72,32 +72,19 @@ maxLONG = testInput("max long")
 #bounding box as string in format minimum latitude, minimum longitude, maximum latitude, maximum longitude
 bb = str(minLAT) + "," + str(minLONG) + "," + str(maxLAT) + "," + str(maxLONG) 
 
-#while statement to continue taking feature input and exporting files until user says they are done
-extract = True 
 
-while extract:
 
-    query = str(raw_input("Enter the feature you would like to scrape from OSM. Enter only one primary feature, you will be asked about classifications of that feature in a second (please review \"http://wiki.openstreetmap.org/wiki/Map_Features\" for suitable primary features): "))
-    query.lower()
+erry = query_yes_no("would you like to extract all osm in your bounding box?")
 
-    test = query_yes_no("Would you like to query by a classification of the primary feature you just entered? ")
-
-    if test is True:
-        clas = str(raw_input("Enter the classification you would like to refine your scrape by (please check valid classifications @ \"http://wiki.openstreetmap.org/wiki/Map_Features\"): "))
-        clas.lower()
-        query = "%22" + query + "%22" + "=" + "%22" + clas + "%22"
-    else:
-        query = "%22" + query + "%22" 
-
-    url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node["+ query +"]("+ bb + ");way[" + query + "]("+ bb + ");relation["+ query +"]("+ bb +"););(._;%3E;);out%20body;")
-
+if erry is True :
+    name = region
+    url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node("+ bb + ");way("+ bb + ");relation("+ bb +"););(._;%3E;);out%20body;")
     print("requesting web resource")
     myRequest = urllib2.Request(url)
     print("reading data from resource")
     myUrlHandle = urllib2.urlopen(myRequest, timeout=90)
-
-    #Create a file named region+query+date
-    name = (region +"-" + query.replace("=","").replace("%22","") + "-" + time.strftime("%Y-%m-%d"+ ".osm"))
+#Create a file named region+query+date
+    name = (region +"-" + time.strftime("%Y-%m-%d"+ ".osm"))
 
     f = open(name,'w')
 
@@ -106,7 +93,44 @@ while extract:
     print("writing data to "+ __location__)
     f.write(myUrlHandle.read()) 
     
-    extract = query_yes_no("Would you like to extract another feature? (yes/no): ", default="no")
+
+else:
+
+    #while statement to continue taking feature input and exporting files until user says they are done
+    extract = True 
+
+    while extract:
+    
+        query = str(raw_input("Enter the feature you would like to scrape from OSM. Enter only one primary feature, you will be asked about classifications of that feature in a second (please review \"http://wiki.openstreetmap.org/wiki/Map_Features\" for suitable primary features): "))
+        query.lower()
+
+        test = query_yes_no("Would you like to query by a classification of the primary feature you just entered? ")
+
+        if test is True:
+            clas = str(raw_input("Enter the classification you would like to refine your scrape by (please check valid classifications @ \"http://wiki.openstreetmap.org/wiki/Map_Features\"): "))
+            clas.lower()
+            query = "%22" + query + "%22" + "=" + "%22" + clas + "%22"
+        else:
+            query = "%22" + query + "%22" 
+
+        url = ("http://overpass-api.de/api/interpreter?data=[out:xml];(node["+ query +"]("+ bb + ");way[" + query + "]("+ bb + ");relation["+ query +"]("+ bb +"););(._;%3E;);out%20body;")
+
+        print("requesting web resource")
+        myRequest = urllib2.Request(url)
+        print("reading data from resource")
+        myUrlHandle = urllib2.urlopen(myRequest, timeout=90)
+
+        #Create a file named region+query+date
+        name = (region +"-" + query.replace("=","").replace("%22","") + "-" + time.strftime("%Y-%m-%d"+ ".osm"))
+
+        f = open(name,'w')
+
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(name)))
+
+        print("writing data to "+ __location__)
+        f.write(myUrlHandle.read()) 
+    
+        extract = query_yes_no("Would you like to extract another feature? (yes/no): ", default="no")
      
 
-print("Ok. Hope you got what you came looking for. Adios. ")
+    print("Ok. Hope you got what you came looking for. Adios. ")
