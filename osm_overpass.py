@@ -37,17 +37,10 @@ def query_yes_no(question, default=None):
             sys.stdout.write("Please respond with 'yes' or 'no' "\
                              "(or 'y' or 'n').\n")
 
-    
-        
-    
-
-print("This program hopes to make scraping open street map a little easier by providing a very structured interface to the Overpass Web API. The API has some limitation in how much can be called (~100 million elements) so keep that in mind when you select your region of interest i.e. dont try to scrape the world. Also, you should probably have internet access if you want this to work.\n") 
-
-#What would you like to name the output file
-region = str(raw_input("Name the region you are interested in: "))
-print("Now I am going to ask you for its bounding box. When entering the following information be aware that if your minimum longitude is bigger than your maximum longitude the bounding box will cross the longitude of 180 ")
-
 def testInput(name):
+       """
+       Check to see if user input a float, if not ask for location again
+    """
     while True:
         try:
             variable = float(raw_input("Enter the " + name + " in decimal degrees: "))
@@ -57,6 +50,16 @@ def testInput(name):
         else:
             return variable    
             break   
+        
+    
+
+print("This program hopes to make scraping open street map a little easier by providing a very structured interface to the Overpass Web API. The API has some limitation in how much can be called (~100 million elements) so keep that in mind when you select your region of interest i.e. dont try to scrape the world. Also, you should probably have internet access if you want this to work.\n") 
+
+#What would you like to name the output file
+region = str(raw_input("Name the region you are interested in: "))
+print("Now I am going to ask you for its bounding box. When entering the following information be aware that if your minimum longitude is bigger than your maximum longitude the bounding box will cross the longitude of 180 ")
+
+
 
 minLAT = testInput("min lat")
 
